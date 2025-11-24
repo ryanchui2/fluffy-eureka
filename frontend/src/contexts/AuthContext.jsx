@@ -31,8 +31,7 @@ export const AuthProvider = ({ children }) => {
                 const res = await fetch(`${BACKEND_URL}/user/me`, {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json','Authorization': `Bearer ${token}`,
                     },
                 });
 
@@ -77,6 +76,7 @@ export const AuthProvider = ({ children }) => {
      */
     const login = async (username, password) => {
         try {
+
             const res = await fetch(`${BACKEND_URL}/login`, {
                 method: 'POST',
                 headers: {
@@ -84,31 +84,26 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify({ username, password }),
             });
-
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));
                 return data?.message || 'login failed';
             }
-
             const data = await res.json();
-
             if (!data || !data.token) {
                 return 'no token';
             }
-
             localStorage.setItem('token', data.token);
 
             try {
-                const meRes = await fetch(`${BACKEND_URL}/user/me`, {
+                const profileRes = await fetch(`${BACKEND_URL}/user/me`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${data.token}`,
                     },
                 });
-
-                if (meRes.ok) {
-                    const meData = await meRes.json();
+                if (profileResRes.ok) {
+                    const meData = await profileRes.json();
                     setUser(meData.user || null);
                 } else {
                     setUser(null);
@@ -141,9 +136,7 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify(userData),
             });
-
             const data = await res.json().catch(() => ({}));
-
             if (!res.ok) {
                 return data?.message || 'registration failed';
             }
