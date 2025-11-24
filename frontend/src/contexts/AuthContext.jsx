@@ -45,7 +45,6 @@ export const AuthProvider = ({ children }) => {
 
                 const data = await res.json();
                 setUser(data.user || null);
-
             } catch (e) {
                 console.error('Error fetching user data:', e);
                 setUser(null);
@@ -102,9 +101,9 @@ export const AuthProvider = ({ children }) => {
                         'Authorization': `Bearer ${data.token}`,
                     },
                 });
-                if (profileResRes.ok) {
-                    const meData = await profileRes.json();
-                    setUser(meData.user || null);
+                if (profileRes.ok) {
+                    const profileData = await profileRes.json();
+                    setUser(profileData.user || null);
                 } else {
                     setUser(null);
                 }
