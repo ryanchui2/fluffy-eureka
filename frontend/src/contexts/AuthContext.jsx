@@ -86,12 +86,15 @@ export const AuthProvider = ({ children }) => {
             });
 
             const data = await res.json().catch(() => ({}));
+            console.log('Login response status:', res.ok, res.status);
+            console.log('Login response data:', data);
 
             if (!res.ok) {
                 return data?.message || 'login failed';
             }
 
             if (!data.token) {
+                console.error('Token not found in response. Data received:', data);
                 return 'no token';
             }
 
