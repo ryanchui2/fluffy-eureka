@@ -85,12 +85,27 @@ export const AuthProvider = ({ children }) => {
                 body: JSON.stringify({ username, password }),
             });
 
+            // Get the response text first to debug
+            const responseText = await res.text();
+            console.log('Raw response:', responseText);
+
             if (!res.ok) {
-                const data = await res.json().catch(() => ({}));
-                return data?.message || 'login failed';
+                try {
+                    const data = JSON.parse(responseText);
+                    return data?.message || 'login failed';
+                } catch {
+                    return 'login failed';
+                }
             }
 
-            const data = await res.json();
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+                console.error('Response was:', responseText);
+                return 'invalid response from server';
+            }
 
             if (!data || !data.token) {
                 console.error('Token not found in response. Data received:', data);
